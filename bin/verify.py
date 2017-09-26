@@ -8,6 +8,7 @@
 import status
 import math
 from collections import defaultdict
+from functools import reduce # https://stackoverflow.com/questions/8689184/nameerror-name-reduce-is-not-defined-in-python
 import rpc_api
 
 ETHER = math.pow(10, 18)
@@ -69,7 +70,7 @@ class ChainState:
         self.stats_blocks = reduce(reduce_to_blocks, blocks, defaultdict(lambda: 0))
         self.stats_uncles_found = reduce(reduce_to_uncles, blocks, defaultdict(lambda: 0))
         self.stats_uncles_made = reduce(reduce_to_uncles_made, self.uncles, defaultdict(lambda: 0))
-        print "Done"
+        print("Done")
         hr()
 
     def display(self):
@@ -98,7 +99,7 @@ class ChainState:
                 print("Invalid balance for miner %s: %s != %s (exp != act)" % (miner, toEther(hex(balance)), toEther(act)))
                 print("                %s wei != %s wei" % (hex(balance).rstrip('L'), act))
         if not has_problem:
-            print "  OK. Blockchain has a valid state"
+            print("  OK. Blockchain has a valid state")
         hr()
 
 def reduce_state(state, block):
