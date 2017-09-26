@@ -17,10 +17,10 @@ def hr():
     print("-------------------------------------------")
 
 def toEther(wei):
-    return long(wei, 16) / ETHER
+    return int(wei, 16) / ETHER
 
 def toWei(ether):
-    val = long(ether * ETHER)
+    val = int(ether * ETHER)
     return val
 
 def toWeiHex(ether):
