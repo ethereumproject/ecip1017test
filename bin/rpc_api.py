@@ -63,7 +63,8 @@ class RpcApi:
                                                    auth_settings=auth_settings,
                                                    collection_formats=collection_formats)
             x = api_response[0]
-            if not x.has_key("result"):
+            # if not x.has_key("result"):
+            if not x["result"]:
                 pprint(x)
             return x["result"]
         except ApiException as e:

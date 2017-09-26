@@ -8,6 +8,7 @@
 import status
 import math
 from collections import defaultdict
+from functools import reduce # https://stackoverflow.com/questions/8689184/nameerror-name-reduce-is-not-defined-in-python
 import rpc_api
 
 ETHER = math.pow(10, 18)
@@ -16,10 +17,10 @@ def hr():
     print("-------------------------------------------")
 
 def toEther(wei):
-    return long(wei, 16) / ETHER
+    return int(wei, 16) / ETHER
 
 def toWei(ether):
-    val = long(ether * ETHER)
+    val = int(ether * ETHER)
     return val
 
 def toWeiHex(ether):
@@ -69,7 +70,7 @@ class ChainState:
         self.stats_blocks = reduce(reduce_to_blocks, blocks, defaultdict(lambda: 0))
         self.stats_uncles_found = reduce(reduce_to_uncles, blocks, defaultdict(lambda: 0))
         self.stats_uncles_made = reduce(reduce_to_uncles_made, self.uncles, defaultdict(lambda: 0))
-        print "Done"
+        print("Done")
         hr()
 
     def display(self):
@@ -93,12 +94,13 @@ class ChainState:
         print("Verifying...")
         for miner, balance in self.state.items():
             act = api.rpc_call(self.nodes[0], "eth_getBalance", [miner, hex(self.height)])
-            if abs(toEther(hex(balance)) - toEther(act)) > 0.0001:
+            print("miner %s: balance: %s" % (miner, balance))
+            if abs(toEther(hex(int(balance))) - toEther(act)) > 0.0001:
                 has_problem = True
                 print("Invalid balance for miner %s: %s != %s (exp != act)" % (miner, toEther(hex(balance)), toEther(act)))
                 print("                %s wei != %s wei" % (hex(balance).rstrip('L'), act))
         if not has_problem:
-            print "  OK. Blockchain has a valid state"
+            print("  OK. Blockchain has a valid state")
         hr()
 
 def reduce_state(state, block):
