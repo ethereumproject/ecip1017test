@@ -94,7 +94,8 @@ class ChainState:
         print("Verifying...")
         for miner, balance in self.state.items():
             act = api.rpc_call(self.nodes[0], "eth_getBalance", [miner, hex(self.height)])
-            if abs(toEther(hex(balance)) - toEther(act)) > 0.0001:
+            print("miner %s: balance: %s" % (miner, balance))
+            if abs(toEther(hex(int(balance))) - toEther(act)) > 0.0001:
                 has_problem = True
                 print("Invalid balance for miner %s: %s != %s (exp != act)" % (miner, toEther(hex(balance)), toEther(act)))
                 print("                %s wei != %s wei" % (hex(balance).rstrip('L'), act))
